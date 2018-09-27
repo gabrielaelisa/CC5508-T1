@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 from skimage import io
-from ToBin import *
 from Algorithms import *
 
 class Grey_Image:
@@ -24,9 +23,9 @@ class Grey_Image:
     def get_histogram(self):
         h = np.zeros(256, dtype=np.float32)
         for i in range(self.image.shape[0]):
-            print(i)
             for j in range(self.image.shape[1]):
-                h[self.image[i, j]] += 1.0
+                gcolor= int(self.image[i, j])
+                h[gcolor] += 1.0
         return h
 
     '''
@@ -39,13 +38,18 @@ class Grey_Image:
         green = self.rgbimage[:, :, 1]
         blue = self.rgbimage[:, :, 2]
         grey = 0.299 * red + 0.587 * green + 0.114 * blue
-        print(red)
         return grey
 
     def to_binary(self, algorithm):
         th = algorithm(self)
+        print(th)
         bin_im = np.zeros(self.image.shape, np.uint8)
-        bin_im[self.image >= th] = 1
+        # correctly should be 1
+        # 255 only for visuals
+        bin_im[self.image >= th] = 255
+        print(bin_im)
         self.image= bin_im
 
-Grey_Image('ejemplos/rut_2.jpg').to_binary(getOtsu).display()
+imagen=Grey_Image('ejemplos/rut_2.jpg')
+imagen.to_binary(getOtsu)
+imagen.display()

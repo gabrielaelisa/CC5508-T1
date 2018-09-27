@@ -12,7 +12,9 @@ from skimage import io
 #get histogram of an image
 def getHistogram(gray_im):
     h=np.zeros(256, dtype=np.float32)
+    print(gray_im.shape)
     for i in range(gray_im.shape[0]):
+
         for j in range(gray_im.shape[1]):
             h[gray_im[i,j]]+=1.0
     return h
@@ -60,4 +62,5 @@ def toUINT8(image):
     image = image.astype(np.uint8, copy=False)
     return image
 
-image =
+image = io.imread('ejemplos/rut_2.jpg')
+print (getOtsu(image))
