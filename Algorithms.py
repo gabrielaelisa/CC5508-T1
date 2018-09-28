@@ -1,9 +1,10 @@
 import numpy as np
+from skimage.filters import threshold_otsu, threshold_local
 
 '''
 getOtsu: returns otsu threshold for a gray image
 '''
-def getOtsu(im):
+def Otsu(im):
     h = im.get_histogram()
     h = h / np.sum(h)
     accum = getAccum(h)
@@ -26,6 +27,9 @@ def getOtsu(im):
             best_t = t
     return best_t
 
+def Adaptative(im):
+    block_size = 35
+    return threshold_local(im.image, block_size, offset=10)
 #compute accum
 def getAccum(histogram, length=256):
     accum=np.zeros(length)

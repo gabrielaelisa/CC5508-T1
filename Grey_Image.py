@@ -6,14 +6,14 @@ class Grey_Image:
     def __init__(self, file):
         self.filename = file
         self.rgbimage = io.imread(self.filename)
+        self.max = 255
         self.image= self.to_gray()
 
-
-
     def display(self):
+
         fig, xs = plt.subplots(1,1)
         xs.set_axis_off()
-        xs.imshow(self.image, cmap="gray", vmin=0, vmax=255)
+        xs.imshow(self.image, cmap="gray", vmin=0, vmax= self.max)
         xs.set_title("Image")
         plt.show()
 
@@ -37,19 +37,20 @@ class Grey_Image:
         red = self.rgbimage[:, :, 0]
         green = self.rgbimage[:, :, 1]
         blue = self.rgbimage[:, :, 2]
-        grey = 0.299 * red + 0.587 * green + 0.114 * blue
-        return grey
+        gray = 0.299 * red + 0.587 * green + 0.114 * blue
+        return gray
 
     def to_binary(self, algorithm):
         th = algorithm(self)
-        print(th)
+        # print(th)
         bin_im = np.zeros(self.image.shape, np.uint8)
         # correctly should be 1
         # 255 only for visuals
         bin_im[self.image >= th] = 255
-        print(bin_im)
-        self.image= bin_im
+        mybin= self.image >=th
+        self.max = 1
+        self.image= mybin
 
 imagen=Grey_Image('ejemplos/rut_2.jpg')
-imagen.to_binary(getOtsu)
+imagen.to_binary(Adaptative)
 imagen.display()
