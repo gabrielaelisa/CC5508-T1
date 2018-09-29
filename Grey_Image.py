@@ -6,9 +6,12 @@ class Grey_Image:
     def __init__(self, file):
         self.filename = file
         self.rgbimage = io.imread(self.filename)
-        self.max = 255
         self.image= self.to_gray()
-
+        self.components = []
+        self.max = 255
+    '''
+    display: shows a grafic of the image
+    '''
     def display(self):
 
         fig, xs = plt.subplots(1,1)
