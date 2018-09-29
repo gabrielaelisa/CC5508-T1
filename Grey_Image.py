@@ -1,14 +1,18 @@
 import matplotlib.pyplot as plt
 from skimage import io
 from Algorithms import *
+from Graph import *
 
+#
 class Grey_Image:
-    def __init__(self, file):
+    def __init__(self, file, algorithm):
         self.filename = file
         self.rgbimage = io.imread(self.filename)
-        self.image= self.to_gray()
-        self.components = []
+        self.gimage= self.to_gray()
         self.max = 255
+        self.binimage= self.to_binary(algorithm)
+        self.components = self.get_components()
+
     '''
     display: shows a grafic of the image
     '''
@@ -16,7 +20,7 @@ class Grey_Image:
 
         fig, xs = plt.subplots(1,1)
         xs.set_axis_off()
-        xs.imshow(self.image, cmap="gray", vmin=0, vmax= self.max)
+        xs.imshow(self.binimage, cmap="gray", vmin=0, vmax= self.max)
         xs.set_title("Image")
         plt.show()
 
@@ -25,9 +29,9 @@ class Grey_Image:
 
     def get_histogram(self):
         h = np.zeros(256, dtype=np.float32)
-        for i in range(self.image.shape[0]):
-            for j in range(self.image.shape[1]):
-                gcolor= int(self.image[i, j])
+        for i in range(self.gimage.shape[0]):
+            for j in range(self.gimage.shape[1]):
+                gcolor= int(self.gimage[i, j])
                 h[gcolor] += 1.0
         return h
 
@@ -46,14 +50,19 @@ class Grey_Image:
     def to_binary(self, algorithm):
         th = algorithm(self)
         # print(th)
-        bin_im = np.zeros(self.image.shape, np.uint8)
+        bin_im = np.zeros(self.gimage.shape, np.uint8)
         # correctly should be 1
         # 255 only for visuals
-        bin_im[self.image >= th] = 255
-        mybin= self.image >=th
+        mybin= self.gimage >=th
         self.max = 1
-        self.image= mybin
+        print(mybin)
+        return mybin
 
-imagen=Grey_Image('ejemplos/rut_2.jpg')
-imagen.to_binary(Adaptative)
+    def get_components(self):
+        g= Graph(self.binimage)
+        g.dfs()
+        return g.components
+
+imagen=Grey_Image('ejemplos/rut_2.jpg', Adaptative)
 imagen.display()
+#imagen.display()

@@ -29,7 +29,7 @@ def Otsu(im):
 
 def Adaptative(im):
     block_size = 35
-    return threshold_local(im.image, block_size, offset=10)
+    return threshold_local(im.gimage, block_size, offset=10)
 #compute accum
 def getAccum(histogram, length=256):
     accum=np.zeros(length)
