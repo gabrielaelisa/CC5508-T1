@@ -16,6 +16,10 @@ class Graph():
     def mark_visited(self, x):
         self.V.append(x)
 
+    def in_range(self, x):
+        if x[0] < self.rows and x[0] >= 0:
+            return x[1] < self.cols and x[1] >= 0
+
 
     # my depth search algorithm
     def dfs(self):
@@ -27,12 +31,10 @@ class Graph():
                 if(self.M[i][j]==1):
                     comp= Component(self.id)
                     self.components.append(comp)
+                    comp.append_point((i,j))
                     self.id += 1
                     self.bfs(comp,i,j)
 
-    def in_range(self, x):
-        if x[0]< self.rows and x[0]>=0:
-            return x[1]< self.cols and x[1]>=0
 
     # my breadth search algorithm
     def bfs(self,comp, i,j):
@@ -51,5 +53,7 @@ class Graph():
 
 
 
-m = Graph([[2, 1],[ 3, 4]])
+m = Graph([[0, 1,0,0],[1,0,0,1], [0,0,1,1]])
 m.dfs()
+for x in m.components:
+    print(x.points)
