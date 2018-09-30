@@ -1,10 +1,12 @@
 import numpy as np
 from skimage.filters import threshold_otsu, threshold_local
 
-'''
-getOtsu: returns otsu threshold for a gray image
-'''
 def Otsu(im):
+    '''
+
+    :param im: Grey_Image
+    :return: ostsu threshold for a gray image
+    '''
     h = im.get_histogram()
     h = h / np.sum(h)
     accum = getAccum(h)
@@ -28,10 +30,21 @@ def Otsu(im):
     return best_t
 
 def Adaptative(im):
+    '''
+
+    :param im: Grey_Image
+    :return: threshold for adaptative algorithm
+    '''
     block_size = 35
     return threshold_local(im.gimage, block_size, offset=10)
-#compute accum
+
 def getAccum(histogram, length=256):
+    '''
+
+    :param histogram: history of each color occurance
+    :param length: range of color intensity
+    :return: compute accum
+    '''
     accum=np.zeros(length)
     accum[0]=histogram[0]
     for i in range(1,length):

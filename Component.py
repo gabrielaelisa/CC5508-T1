@@ -9,4 +9,9 @@ class Component:
         self.boundingbox= []
 
     def append_point(self, x):
+        '''
+
+        :param x: tuple (i,j)
+        :return: void
+        '''
         self.points.append(x)
