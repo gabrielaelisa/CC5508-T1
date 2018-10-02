@@ -29,7 +29,7 @@ class Grey_Image:
 
         fig, xs = plt.subplots(1, 1)
         xs.set_axis_off()
-        xs.imshow(self.binimage, cmap="gray", vmin=0, vmax=self.max)
+        xs.imshow(self.rgbimage, cmap="gray", vmin=0, vmax=255)
         xs.set_title("Image")
         plt.show()
 
@@ -87,9 +87,15 @@ class Grey_Image:
         '''
         g = Graph(self.binimage)
         g.dfs()
+
         return g.components
 
+    def draw_box(self):
+        image= self.rgbimage
+        for x in self.components:
+            x.draw_box(image)
 
 imagen = Grey_Image('ejemplos/rut_2.jpg', Adaptative)
+imagen.draw_box()
 imagen.display()
 # imagen.display()

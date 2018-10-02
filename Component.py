@@ -31,7 +31,7 @@ class Component:
             if y> y_max:
                 y_max=y
         # initialpoint for bondingbox
-        # esquina superior derecha
+        # esquina superior izquierda
         # todo
         # checkear que este dentro de los indices de la imagen
         xi = x_min-1
@@ -41,8 +41,38 @@ class Component:
         self.boundingbox.extend([xi, yi, width, heigth])
         print(self.boundingbox)
 
-com = Component(1)
-com.points= [(1,2),(2,3),(3,4),(4,5)]
-com.find_box()
+    def draw_box(self, image):
+        self.find_box()
+        box= self.boundingbox
+        red = image[:, :, 0]
+        green = image[:, :, 1]
+        blue = image[:, :, 2]
+        x = box[0]
+        y= box[1]
+        w= box[2]
+        h= box[3]
+
+        for i in range(x, x+w+1):
+            #borde superior
+            red[i][y]= 255
+            green[i][y]=0
+            blue[i][y]= 0
+            #borde inferior
+            red[i][y-h] = 255
+            green[i][y-h] = 0
+            blue[i][y-h] = 0
+        for j in range(y-h , y+1):
+            #borde izquiedo
+            red[x][j] = 255
+            green[x][j] = 0
+            blue[x][j] = 0
+            #borde derecho
+            red[x+w][j] = 255
+            green[x+w][j] = 0
+            blue[x+w][j] = 0
+
+#com = Component(1)
+#com.points= [(1,2),(2,3),(3,4),(4,5)]
+#com.find_box()
 
 
