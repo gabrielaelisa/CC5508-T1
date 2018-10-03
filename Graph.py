@@ -71,3 +71,4 @@ class Graph:
                         self.mark_visited(x)
                         comp.append_point(x)
                         myqueue.put(x)
+

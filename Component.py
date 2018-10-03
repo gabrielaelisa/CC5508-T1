@@ -1,3 +1,4 @@
+import math
 
 class Component:
 
@@ -56,21 +57,68 @@ class Component:
         for i in range(x, x+w+1):
             #borde superior
             red[i][y]= 255
-            green[i][y]=0
-            blue[i][y]= 0
+            green[i][y]=blue[i][y]= 0
             #borde inferior
             red[i][y-h] = 255
-            green[i][y-h] = 0
-            blue[i][y-h] = 0
+            green[i][y-h] = blue[i][y-h] = 0
         for j in range(y-h , y+1):
             #borde izquiedo
             red[x][j] = 255
-            green[x][j] = 0
-            blue[x][j] = 0
+            green[x][j] = blue[x][j] = 0
             #borde derecho
             red[x+w][j] = 255
-            green[x+w][j] = 0
-            blue[x+w][j] = 0
+            green[x+w][j] = blue[x+w][j] = 0
+
+    def next_neighbour(self, p, q):
+        '''
+        returns point p next clockwise neighbour,
+        starting from q
+        :param p:
+        :param q:
+        :return:
+        '''
+        i= p[0]
+        j= p[1]
+        n= [(i, j-1), (i-1, j-1), (i-1, j), (i-1,j+ 1),
+            (i, j+1), (i+1, j+1), (i+1, j), (i+1, j-1)]
+        indx= n.index(q)
+        if indx==len(n)-1:
+            return n[0]
+        else:
+            return n[indx+1]
+
+    def find_borders(self, image):
+        d= 100000
+        pi_0=0
+        pj_0=0
+        rnd= 0
+        #look for the point with smaller euclidean distance from de origin
+        #this point will be the start poiny
+        for x in self.points:
+            dist= math.sqrt(math.pow(x[0],2)+ math.pow(x[1],2))
+            if dist<d:
+                d=dist
+                pi_0= x[0]
+                pj_0= x[1]
+        p=(pi_0, pj_0)
+        #----------------------------------
+        self.boundary.append(p)
+        #previous
+        q= (pi_0,pj_0-1)
+        #next
+        n= self.next_neighbour(p,q)
+        while (n!=(pi_0, pj_0)):
+            if(image[n[0]][n[1]]):
+                p=n
+            else:
+                q=n
+                n=self.next_neighbour()
+        while (pi!=pi_0 and pj!=pj_0) or rnd==0:
+
+
+
+
+
 
 #com = Component(1)
 #com.points= [(1,2),(2,3),(3,4),(4,5)]
