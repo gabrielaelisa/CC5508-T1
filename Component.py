@@ -8,6 +8,9 @@ class Component:
         self.boundary= []
         self.boundingbox= []
 
+    def init_attributes(self):
+        self.find_box()
+
     def append_point(self, x):
         '''
 
@@ -39,10 +42,8 @@ class Component:
         width= x_max +1 -(x_min-1)
         heigth= y_max +1 -(y_min -1)
         self.boundingbox.extend([xi, yi, width, heigth])
-        print(self.boundingbox)
 
     def draw_box(self, image):
-        self.find_box()
         box= self.boundingbox
         red = image[:, :, 0]
         green = image[:, :, 1]

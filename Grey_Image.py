@@ -19,6 +19,11 @@ class Grey_Image:
         self.max = 255
         self.binimage = self.to_binary(algorithm)
         self.components = self.get_components()
+        self.init_attributes()
+
+    def init_attributes(self):
+        for x in self.components:
+            x.init_attributes()
 
 
     def display(self):
@@ -92,10 +97,19 @@ class Grey_Image:
 
     def draw_box(self):
         image= self.rgbimage
+        l= len(self.components)
+        sum =0
+
         for x in self.components:
-            x.draw_box(image)
+            sum+= x.boundingbox[2]*x.boundingbox[3]
+        average= sum/l
+        for x in self.components:
+            if(x.boundingbox[2]*x.boundingbox[3]>2/3*average):
+                x.draw_box(image)
+
 
 imagen = Grey_Image('ejemplos/rut_2.jpg', Adaptative)
+#imagen.del_smallcomp()
 imagen.draw_box()
 imagen.display()
 # imagen.display()
