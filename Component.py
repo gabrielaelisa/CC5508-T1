@@ -89,32 +89,42 @@ class Component:
 
     def find_borders(self, image):
         d= 100000
-        pi_0=0
-        pj_0=0
-        rnd= 0
+        p0= (0,0)
+
         #look for the point with smaller euclidean distance from de origin
         #this point will be the start poiny
         for x in self.points:
             dist= math.sqrt(math.pow(x[0],2)+ math.pow(x[1],2))
             if dist<d:
                 d=dist
-                pi_0= x[0]
-                pj_0= x[1]
-        p=(pi_0, pj_0)
-        #----------------------------------
+                p0= (x[0], x[1])
+        p=p0
         self.boundary.append(p)
         #previous
-        q= (pi_0,pj_0-1)
+        q= (p0[0],p0[1]-1)
         #next
-        n= self.next_neighbour(p,q)
-        while (n!=(pi_0, pj_0)):
+        n= q
+        while (n!=p0):
+            
+            n=self.next_neighbour(p,q)
             if(image[n[0]][n[1]]):
                 p=n
+                self.boundary.append(p)
             else:
                 q=n
-                n=self.next_neighbour()
-        while (pi!=pi_0 and pj!=pj_0) or rnd==0:
 
+
+
+    def draw_borders(self, image):
+        red = image[:, :, 0]
+        green = image[:, :, 1]
+        blue = image[:, :, 2]
+        for x in self.boundary:
+            i= x[0]
+            j= x[1]
+            # borde superior
+            red[i][j] = 255
+            green[i][j] = blue[i][j] = 0
 
 
 

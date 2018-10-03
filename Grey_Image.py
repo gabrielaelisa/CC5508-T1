@@ -107,9 +107,15 @@ class Grey_Image:
             if(x.boundingbox[2]*x.boundingbox[3]>2/3*average):
                 x.draw_box(image)
 
+    def draw_border(self):
+        for x in self.components:
+            x.find_borders(self.binimage)
+            x.draw_borders(self.rgbimage)
+
+
 
 imagen = Grey_Image('ejemplos/rut_2.jpg', Adaptative)
 #imagen.del_smallcomp()
-imagen.draw_box()
+imagen.draw_border()
 imagen.display()
 # imagen.display()
