@@ -105,13 +105,14 @@ class Component:
         #next
         n= q
         while (n!=p0):
-            
-            n=self.next_neighbour(p,q)
+            qo=q
+            q=n
+            n=self.next_neighbour(p,qo)
             if(image[n[0]][n[1]]):
                 p=n
                 self.boundary.append(p)
-            else:
-                q=n
+            #else:
+            #   q=n
 
 
 
