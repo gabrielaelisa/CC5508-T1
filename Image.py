@@ -3,9 +3,7 @@ from skimage import io
 from Algorithms import *
 from Graph import *
 
-
-#
-class Grey_Image:
+class Image:
 
     def __init__(self, file, algorithm):
         '''
@@ -16,7 +14,6 @@ class Grey_Image:
         self.filename = file
         self.rgbimage = io.imread(self.filename)
         self.gimage = self.to_gray()
-        self.max = 255
         self.binimage = self.to_binary(algorithm)
         self.components = self.get_components()
         self.init_attributes()
@@ -25,20 +22,18 @@ class Grey_Image:
         for x in self.components:
             x.init_attributes()
 
-
-    def display(self):
+    def display(self, color):
         '''
 
         :return: shows a grafic of the image
         '''
-
+        map = {'gray': (self.gimage, 255), 'color': (self.rgbimage, 255), 'binary': (self.binimage, 1)}
+        val = map.get(color)
         fig, xs = plt.subplots(1, 1)
         xs.set_axis_off()
-        xs.imshow(self.binimage, cmap="gray", vmin=0, vmax=1)
-        xs.set_title("Image")
+        xs.imshow(val[0], cmap="gray", vmin=0, vmax=val[1])
+        xs.set_title(color +" " + "Image")
         plt.show()
-
-
 
     def get_histogram(self):
         '''
@@ -52,8 +47,6 @@ class Grey_Image:
                 gcolor = int(self.gimage[i, j])
                 h[gcolor] += 1.0
         return h
-
-
 
     def to_gray(self):
         '''
@@ -79,7 +72,6 @@ class Grey_Image:
         # correctly should be 1
         # 255 only for visuals
         mybin = self.gimage >= th
-        self.max = 1
         print(mybin)
         return mybin
 
@@ -95,15 +87,15 @@ class Grey_Image:
         return g.components
 
     def draw_box(self):
-        image= self.rgbimage
-        l= len(self.components)
-        sum =0
+        image = self.rgbimage
+        l = len(self.components)
+        sum = 0
 
         for x in self.components:
-            sum+= x.boundingbox[2]*x.boundingbox[3]
-        average= sum/l
+            sum += x.boundingbox[2] * x.boundingbox[3]
+        average = sum / l
         for x in self.components:
-            if(x.boundingbox[2]*x.boundingbox[3]>2/3*average):
+            if (x.boundingbox[2] * x.boundingbox[3] > 2 / 3 * average):
                 x.draw_box(image)
 
     def draw_border(self):
@@ -112,9 +104,5 @@ class Grey_Image:
             x.draw_borders(self.rgbimage)
 
 
-
-imagen = Grey_Image('ejemplos/rut_2.jpg', Otsu)
-#imagen.del_smallcomp()
-#imagen.draw_border()
-imagen.display()
-# imagen.display()
+#imagen = Image('ejemplos/rut_2.jpg', Adaptative)
+#imagen.display("binary")
