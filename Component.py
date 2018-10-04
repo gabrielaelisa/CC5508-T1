@@ -79,40 +79,45 @@ class Component:
         '''
         i= p[0]
         j= p[1]
-        n= [(i, j-1), (i-1, j-1), (i-1, j), (i-1,j+ 1),
+        n= [(i, j-1), (i-1, j-1), (i-1, j), (i-1, j+ 1),
             (i, j+1), (i+1, j+1), (i+1, j), (i+1, j-1)]
         indx= n.index(q)
         if indx==len(n)-1:
+            #print(n[0])
             return n[0]
         else:
+            #print(n[indx + 1])
             return n[indx+1]
+
 
     def find_borders(self, image):
         d= 100000
         p0= (0,0)
 
-        #look for the point with smaller euclidean distance from de origin
-        #this point will be the start poiny
+        """look for the point with smaller euclidean distance from de origin
+        this point will be the start point"""
         for x in self.points:
             dist= math.sqrt(math.pow(x[0],2)+ math.pow(x[1],2))
             if dist<d:
                 d=dist
                 p0= (x[0], x[1])
+
         p=p0
-        self.boundary.append(p)
-        #previous
         q= (p0[0],p0[1]-1)
-        #next
-        n= q
-        while (n!=p0):
-            qo=q
-            q=n
-            n=self.next_neighbour(p,qo)
-            if(image[n[0]][n[1]]):
-                p=n
+
+        self.boundary.append(p)
+
+        while (self.next_neighbour(p, q) !=p0):
+            q_p= q
+            q=self.next_neighbour(p, q_p)
+            print("q=", q)
+            if (not image[q[0]][q[1]]):
+                p=q
+                q=q_p
                 self.boundary.append(p)
-            #else:
-            #   q=n
+
+        print(self.boundary)
+
 
 
 
@@ -130,9 +135,8 @@ class Component:
 
 
 
-
-#com = Component(1)
-#com.points= [(1,2),(2,3),(3,4),(4,5)]
-#com.find_box()
-
-
+example= [(1,3),(1,4),(1,5), (2,2), (2,3), (2,4), (3,1), (3,2), (3,3)]
+image=[[0,0,0,0,0,0,0], [0,0,0,1,1,1,0], [0,0,1,1,1,0,0], [0,1,1,1,0,0,0], [0,0,0,0,0,0,0]]
+com= Component(1)
+com.points=example
+com.find_borders(image)

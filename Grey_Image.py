@@ -34,7 +34,7 @@ class Grey_Image:
 
         fig, xs = plt.subplots(1, 1)
         xs.set_axis_off()
-        xs.imshow(self.rgbimage, cmap="gray", vmin=0, vmax=255)
+        xs.imshow(self.binimage, cmap="gray", vmin=0, vmax=1)
         xs.set_title("Image")
         plt.show()
 
@@ -76,12 +76,11 @@ class Grey_Image:
         :return: returns image in binary form
         '''
         th = algorithm(self)
-        # print(th)
-        bin_im = np.zeros(self.gimage.shape, np.uint8)
         # correctly should be 1
         # 255 only for visuals
         mybin = self.gimage >= th
         self.max = 1
+        print(mybin)
         return mybin
 
     def get_components(self):
@@ -114,8 +113,8 @@ class Grey_Image:
 
 
 
-imagen = Grey_Image('ejemplos/rut_2.jpg', Adaptative)
+imagen = Grey_Image('ejemplos/rut_2.jpg', Otsu)
 #imagen.del_smallcomp()
-imagen.draw_border()
+#imagen.draw_border()
 imagen.display()
 # imagen.display()
