@@ -2,16 +2,15 @@ import matplotlib.pyplot as plt
 from skimage import io
 from Algorithms import *
 from Graph import *
+class GreyImage:
 
-class GrayImage:
-
-    def __init__(self, gray_image, algorithm):
+    def __init__(self, grey_image, algorithm):
         '''
 
-        :param file: source file jpg image
-        :param algorithm: funcition either Otsu or Adaptative
+        :param gray_image: 1 channel matrix of max value 255
+        :param algorithm: function either Otsu or Adaptative
         '''
-        self.image = gray_image
+        self.image = grey_image
         self.binimage= self.to_binary(algorithm)
         self.components = self.get_components()
         self.init_attributes()
