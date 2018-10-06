@@ -1,5 +1,5 @@
 import math
-
+import numpy as np
 
 class Component:
 
@@ -130,3 +130,28 @@ class Component:
             # borde superior
             red[i][j] = 255
             green[i][j] = blue[i][j] = 0
+
+    def border_histogram(self):
+        r= len(self.boundary)%4
+        length =len(self.boundary)
+        section_size= length/4
+        #key direction, value indx
+        keys= {(-1,0): 0, (1,0): 1, (0,-1): 2 ,(0,1): 3,
+               (-1,-1): 4, (-1, 1): 5, (1,-1): 6, (1, 1): 7}
+        #up, down , left, right ,t-left,t-right, bot-l, bot-r
+        dirs=[0,0,0,0,0,0,0,0]
+        for i in range(length-1):
+            prev= self.boundary[i]
+            next=self.boundary[i+1]
+            diff= np.subtract(next, prev)
+            indx= keys.get(diff)
+            dirs[indx]+=1
+
+
+
+
+
+
+
+
+

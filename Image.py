@@ -104,5 +104,21 @@ class Image:
             x.draw_borders(self.rgbimage)
 
 
-#imagen = Image('ejemplos/rut_2.jpg', Adaptative)
-#imagen.display("binary")
+imagen = Image('ejemplos/rut_7.jpg', Otsu)
+imagen2=Image('ejemplos/rut_7.jpg', Adaptative)
+imagen.draw_box()
+imagen2.draw_box()
+
+fig, xs = plt.subplots(2, 1)
+xs[0].imshow(imagen.rgbimage, cmap='gray', vmax=255, vmin=0)
+xs[0].axis('off')
+xs[0].set_title("Boxes for Adaptative ")
+
+xs[1].imshow(imagen2.rgbimage, cmap='gray', vmax=1, vmin=0)
+xs[1].axis('off')
+xs[1].set_title("Boxes for Otsu")
+'''
+xs[2].imshow(image2.binimage, cmap='gray', vmax=1, vmin=0)
+xs[2].axis('off')
+xs[2].set_title("Adaptative Algorithm")'''
+plt.show()
