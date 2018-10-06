@@ -10,8 +10,9 @@ class Component:
         self.boundary = []
         self.boundingbox = []
 
-    def init_attributes(self):
+    def init_attributes(self, image):
         self.find_box()
+        self.find_borders(image)
 
     def append_point(self, x):
         '''
@@ -70,6 +71,16 @@ class Component:
             red[x + w][j] = 255
             green[x + w][j] = blue[x + w][j] = 0
 
+    def in_range(self, x, im):
+        '''
+
+        :param x: tuple (i,j)
+        :param im: image matrix
+        :return: bool , is the tuple inside the range of the graph limits
+        '''
+        if x[0] < len(im) and x[0] >= 0:
+            return x[1] < len(im[0])  and x[1] >= 0
+
     def next_neighbour(self, p, q):
         '''
         returns point q next clockwise neighbour,
@@ -85,10 +96,8 @@ class Component:
              (i, j + 1), (i + 1, j + 1), (i + 1, j), (i + 1, j - 1)]
         indx = n.index(q)
         if indx == len(n) - 1:
-            # print(n[0])
             return n[0]
         else:
-            # print(n[indx + 1])
             return n[indx + 1]
 
     def find_borders(self, image):
@@ -111,7 +120,7 @@ class Component:
         while (self.next_neighbour(p, q) != p0):
             q_p = q
             q = self.next_neighbour(p, q_p)
-            if (not image[q[0]][q[1]]):
+            if (not self.in_range(q,image) or not image[q[0]][q[1]]):
                 p = q
                 q = q_p
                 self.boundary.append(p)

@@ -20,7 +20,7 @@ class Image:
 
     def init_attributes(self):
         for x in self.components:
-            x.init_attributes()
+            x.init_attributes(self.binimage)
 
     def display(self, color):
         '''
@@ -54,6 +54,8 @@ class Image:
         :return: process a 3 channesl RGB image and returns a 1 channel
         grey image
         '''
+
+        print(self.rgbimage)
         # GRAY = 0.299*ROJO + 0.587*VERDE + 0.114*AZUL
         red = self.rgbimage[:, :, 0]
         green = self.rgbimage[:, :, 1]
@@ -86,37 +88,39 @@ class Image:
 
         return g.components
 
-    def draw_box(self):
-        image = self.rgbimage
+    def avrg_size(self):
         l = len(self.components)
         sum = 0
 
         for x in self.components:
             sum += x.boundingbox[2] * x.boundingbox[3]
-        average = sum / l
+        return sum / l
+
+    def draw_box(self):
+        image = self.rgbimage
         for x in self.components:
-            if (x.boundingbox[2] * x.boundingbox[3] > 2 / 3 * average):
+            if (x.boundingbox[2] * x.boundingbox[3] > 2 / 3 * self.avrg_size()):
                 x.draw_box(image)
 
     def draw_border(self):
         for x in self.components:
-            x.find_borders(self.binimage)
-            x.draw_borders(self.rgbimage)
+            if (x.boundingbox[2] * x.boundingbox[3] > 2 / 3 * self.avrg_size()):
+                x.draw_borders(self.rgbimage)
 
 
 imagen = Image('ejemplos/rut_7.jpg', Otsu)
 imagen2=Image('ejemplos/rut_7.jpg', Adaptative)
-imagen.draw_box()
-imagen2.draw_box()
+imagen.draw_border()
+imagen2.draw_border()
 
 fig, xs = plt.subplots(2, 1)
 xs[0].imshow(imagen.rgbimage, cmap='gray', vmax=255, vmin=0)
 xs[0].axis('off')
-xs[0].set_title("Boxes for Adaptative ")
+xs[0].set_title("Borders for Adaptative ")
 
 xs[1].imshow(imagen2.rgbimage, cmap='gray', vmax=1, vmin=0)
 xs[1].axis('off')
-xs[1].set_title("Boxes for Otsu")
+xs[1].set_title("Borders for Otsu")
 '''
 xs[2].imshow(image2.binimage, cmap='gray', vmax=1, vmin=0)
 xs[2].axis('off')
