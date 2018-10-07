@@ -43,15 +43,21 @@ class Image(GreyImage):
         return gray
 
     def draw_box(self):
-        image = self.rgbimage
+        #create a local copy of atribute
+        image = self.rgbimage.copy()
         for x in self.components:
             if (x.boundingbox[2] * x.boundingbox[3] > 2 / 3 * self.avrg_size()):
                 x.draw_box(image)
+        return image
 
     def draw_border(self):
+        #idem
+        image = self.rgbimage.copy()
         for x in self.components:
             if (x.boundingbox[2] * x.boundingbox[3] > 2 / 3 * self.avrg_size()):
-                x.draw_borders(self.rgbimage)
+                x.draw_borders(image)
+        return image
+
 
 
 '''

@@ -6,6 +6,10 @@ if __name__ == '__main__':
     file= sys.argv[1]
     th= map.get(sys.argv[2].lower())
     im= Image(file,th)
-    im.display('gray')
+    box=im.draw_box()
+    #im.display('color')
+    im.draw_border()
+    #im.display('color')
+    plt.imsave('bordes.jpg', box )
 
 
