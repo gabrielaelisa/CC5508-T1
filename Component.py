@@ -140,7 +140,7 @@ class Component:
             red[i][j] = 255
             green[i][j] = blue[i][j] = 0
 
-    def border_histogram(self):
+    def feature_vector(self):
         r= len(self.boundary)%4
         length =len(self.boundary)
         section_size= length/4
@@ -154,9 +154,9 @@ class Component:
             prev= self.boundary[i]
             next=self.boundary[i+1]
             diff= np.subtract(next, prev)
-            indx= keys.get(diff)
+            indx= keys[diff]
             FV[indx]+=1
-        return FV
+        return FV/length
 
 
 
