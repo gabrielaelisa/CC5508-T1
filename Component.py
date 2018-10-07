@@ -154,9 +154,10 @@ class Component:
             prev= self.boundary[i]
             next=self.boundary[i+1]
             diff= np.subtract(next, prev)
-            indx= keys[diff]
+            key= (diff[0], diff[1])
+            indx= keys[key]
             FV[indx]+=1
-        return FV/length
+        return np.true_divide(FV,length)
 
 
 
