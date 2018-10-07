@@ -54,20 +54,23 @@ class Image(GreyImage):
                 x.draw_borders(self.rgbimage)
 
 
-imagen = Image('ejemplos/rut_7.jpg', Otsu)
-imagen2=Character(6,'modelos/6/6_1.jpg', Adaptative)
-imagen.draw_border()
+'''
+imagen = Image('ejemplos/rut_6.jpg', Otsu)
+imagen2=Image('ejemplos/rut_6.jpg', Adaptative)
+#imagen.draw_box()
+#imagen2.draw_box()
 
-fig, xs = plt.subplots(2, 1)
+fig, xs = plt.subplots(3, 1)
 xs[0].imshow(imagen.rgbimage, cmap='gray', vmax=255, vmin=0)
 xs[0].axis('off')
-xs[0].set_title("Borders for Adaptative ")
+xs[0].set_title("Original")
 
-xs[1].imshow(imagen2.binimage, cmap='gray', vmax=1, vmin=0)
+xs[1].imshow(imagen.binimage, cmap='gray', vmax=1, vmin=0)
 xs[1].axis('off')
-xs[1].set_title("Borders for Otsu")
-'''
-xs[2].imshow(image2.binimage, cmap='gray', vmax=1, vmin=0)
+xs[1].set_title("Otsu Algorithm")
+
+xs[2].imshow(imagen2.binimage, cmap='gray', vmax=1, vmin=0)
 xs[2].axis('off')
-xs[2].set_title("Adaptative Algorithm")'''
+xs[2].set_title("Adaptative Algorithm boxsize 55")
 plt.show()
+'''
