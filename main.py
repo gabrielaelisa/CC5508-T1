@@ -3,7 +3,6 @@ from Image import *
 from Character_Array import *
 
 
-
 def find_best(array):
     sum=[0,0,0,0,0,0,0,0,0,0,0]
     for x in array:
@@ -15,7 +14,11 @@ def find_best(array):
         if sum[i] > max:
             max = sum[i]
             name = i
-    return name
+    if name == 10:
+        return 'k'
+    else:
+        return name
+
 
 if __name__ == '__main__':
     map={'otsu': Otsu, 'adaptative': Adaptative}
@@ -42,11 +45,13 @@ if __name__ == '__main__':
 
 '''
 import scipy.misc
+#im=io.imread('modelos_nuevos/1/1_nuevo1.jpg')
+#print(im)
+image= Image('modelos_nuevos/1/1_test.jpg', Adaptative)
+im= image.binimage.copy()
+scipy.misc.toimage(im, cmin=0, cmax=1).save('modelos/1/1_nuevo2.jpg')
 
 
-image= io.imread('modelos/5/5_nuevo1.jpg')
-print(image)
-image2= io.imread('modelos/5/5_tes.jpg')
 red = image[:, :, 0]
 green = image[:, :, 1]
 blue = image[:, :, 2]

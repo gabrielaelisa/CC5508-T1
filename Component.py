@@ -160,7 +160,8 @@ class Component:
             key = (diff[0], diff[1])
             indx = keys[key]
             FV[indx] += 1
-        self.feature_vector= np.true_divide(FV, length)
+        magnitude= math.sqrt(sum(FV[i] * FV[i] for i in range(len(FV))))
+        self.feature_vector= np.true_divide(FV, magnitude)
 
     def find_char(self, chars):
         fv = self.feature_vector
@@ -178,8 +179,8 @@ class Component:
         print(mykey)
 
 
-'''
-    def feature_vector(self):
+    '''
+    def find_fv(self):
         total=(0,0)
         for p in self.boundary:
             sum= np.add(p,total)
@@ -206,7 +207,6 @@ class Component:
 
         sections=[TL, TR, BL, BR]
 
-        length= len(self.boundary)
         #key direction, value indx
         # up, down , left, right ,t-left,t-right, bot-l, bot-r
         keys= {(-1,0): 0, (1,0): 1, (0,-1): 2 ,(0,1): 3,
@@ -221,14 +221,16 @@ class Component:
                 diff= np.subtract(next, prev)
                 key= (diff[0], diff[1])
                 if not keys.__contains__(key):
-                    length-=1
                     continue
                 indx= keys[key]
                 FV[indx+8*i]+=1
 
-        return np.true_divide(FV,length)
-'''
-
+        sum=0
+        for i in range(32):
+            sum+= FV[i]*FV[i]
+        magnitude= math.sqrt(sum)
+        self.feature_vector = np.true_divide(FV, magnitude)
+    '''
 
 
 
