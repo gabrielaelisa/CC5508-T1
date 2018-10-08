@@ -7,8 +7,9 @@ if __name__ == '__main__':
     th= map.get(sys.argv[2].lower())
     im= Image(file,th)
     box=im.draw_box()
-    im.draw_border()
-    plt.imsave('bordes.jpg', box )
+    plt.imsave('boxes.jpg', box)
+    border=im.draw_border()
+    plt.imsave('borders.jpg', border)
     char= Characters(th)
     im.print_characters(char)
 

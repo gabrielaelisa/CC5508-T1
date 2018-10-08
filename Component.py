@@ -141,9 +141,25 @@ class Component:
             green[i][j] = blue[i][j] = 0
 
     def feature_vector(self):
-        r= len(self.boundary)%4
-        length =len(self.boundary)
-        section= int(length/4)
+        w= self.boundingbox[2]
+        h= self.boundingbox[3]
+        #preprocess sections
+        TL= []
+        TR= []
+        BL= []
+        BR= []
+        for point in self.boundary:
+            if point[0]> h/2:
+                if point[1]> w/2:
+                    TR.append(point)
+                else:
+                    TL.append(point)
+            elif point[1]> w/2:
+                BR.append(point)
+            else:
+                BL.append(point)
+
+        sections=[TL, TR, BL, BR]
 
         #key direction, value indx
         # up, down , left, right ,t-left,t-right, bot-l, bot-r
@@ -153,26 +169,44 @@ class Component:
         #feature vector
         FV=np.zeros(32)
         for i in range(4):
-            for j in range(section):
-                if(i*section + j+1== length):
-                    continue
-                prev= self.boundary[i*section + j]
-                next=self.boundary[i*section+ j+1]
+            for j in range(len(sections[i])-1):
+                prev= self.boundary[j]
+                next=self.boundary[j+1]
                 diff= np.subtract(next, prev)
                 key= (diff[0], diff[1])
                 indx= keys[key]
                 FV[indx+8*i]+=1
-        return np.true_divide(FV,length-r)
+        return np.true_divide(FV,len(self.boundary))
 
     def feature_vector2(self):
-        return [len(self.boundary)/(self.boundingbox[2]*self.boundingbox[3])]
+        w = self.boundingbox[2]
+        h = self.boundingbox[3]
+        area= w*h
+        # preprocess sections
+        TL = []
+        TR = []
+        BL = []
+        BR = []
+        for point in self.boundary:
+            if point[0] > h / 2:
+                if point[1] > w / 2:
+                    TR.append(point)
+                else:
+                    TL.append(point)
+            elif point[1] > w / 2:
+                BR.append(point)
+            else:
+                BL.append(point)
 
-    def find_char(self,chars):
+        return [len(TL)/area, len(TR)/area, len(BL)/area, len(BR)/area]
+
+
+    def find_char2(self,chars):
         fv= self.feature_vector2()
         min=1000000
         mykey= ''
         for key, value in chars.fv.items():
-            dist = abs(fv[0]-value[0])
+            dist = np.linalg.norm(fv - value)
             #print(dist)
             if dist< min:
                 min=dist
@@ -181,13 +215,14 @@ class Component:
         print(mykey)
 
 
-    def find_char2(self, chars):
+    def find_char(self, chars):
         fv=self.feature_vector()
         min=1000000
         mykey=''
         myval= []
         for key, value in chars.fv.items():
             dist = np.linalg.norm(fv - value)
+            print(dist)
             if dist< min:
                 min=dist
                 mykey=key

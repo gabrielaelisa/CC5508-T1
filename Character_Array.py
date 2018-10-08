@@ -11,7 +11,7 @@ class Characters:
         self.chars=[[],[],[],[],[],[],[],[],[],[],[]]
         self.fv= {}
 
-        for subdir, dirs, files in os.walk('modelos_nuevos'):
+        for subdir, dirs, files in os.walk('modelos'):
             for file in files:
                 name= os.path.split(subdir)[1]
                 if name =='K':
@@ -23,9 +23,9 @@ class Characters:
         for row in self.chars:
             length= len(row)
             #sum= np.zeros(32)
-            sum=[0]
+            sum= np.zeros(4)
             for col in row:
-
+                print(len(col.components))
                 cm=col.components[0]
                 fv= cm.feature_vector2()
                 aux= sum.copy()
