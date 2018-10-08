@@ -58,6 +58,11 @@ class Image(GreyImage):
                 x.draw_borders(image)
         return image
 
+    def print_characters(self, chars):
+        for x in self.components:
+            if (x.boundingbox[2] * x.boundingbox[3] > 2 / 3 * self.avrg_size()):
+                x.find_char(chars)
+
 
 
 '''

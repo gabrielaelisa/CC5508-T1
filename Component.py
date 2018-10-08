@@ -159,6 +159,23 @@ class Component:
             FV[indx]+=1
         return np.true_divide(FV,length)
 
+    def find_char(self, chars):
+        fv=self.feature_vector()
+        min=1000000
+        mykey=''
+        myval= []
+        print("this fv", fv)
+        for key, value in chars.fv.items():
+            dist = np.linalg.norm(fv - value)
+            if dist< min:
+                min=dist
+                mykey=key
+                myval= value
+        # todo revisar el caso K
+        print(myval)
+        print(mykey)
+
+
 
 
 
