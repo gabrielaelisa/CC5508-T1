@@ -18,6 +18,12 @@ class GreyImage:
     def init_attributes(self):
         for x in self.components:
             x.init_attributes(self.binimage)
+        self.reorder_components()
+
+    def reorder_components(self):
+        s=sorted(self.components, key=lambda x: x.boundingbox[1])
+        self.components= s
+
 
 
     def get_histogram(self):

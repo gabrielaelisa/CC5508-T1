@@ -140,6 +140,7 @@ class Component:
             red[i][j] = 255
             green[i][j] = blue[i][j] = 0
 
+
     def feature_vector(self):
         w= self.boundingbox[2]
         h= self.boundingbox[3]
@@ -160,7 +161,7 @@ class Component:
                 BL.append(point)
 
         sections=[TL, TR, BL, BR]
-
+        length= len(self.boundary)
         #key direction, value indx
         # up, down , left, right ,t-left,t-right, bot-l, bot-r
         keys= {(-1,0): 0, (1,0): 1, (0,-1): 2 ,(0,1): 3,
@@ -170,65 +171,56 @@ class Component:
         FV=np.zeros(32)
         for i in range(4):
             for j in range(len(sections[i])-1):
-                prev= self.boundary[j]
-                next=self.boundary[j+1]
+                prev= sections[i][j]
+                next=sections[i][j+1]
                 diff= np.subtract(next, prev)
                 key= (diff[0], diff[1])
+                if not keys.__contains__(key):
+                    length-=1
+                    continue
                 indx= keys[key]
                 FV[indx+8*i]+=1
-        return np.true_divide(FV,len(self.boundary))
 
-    def feature_vector2(self):
-        w = self.boundingbox[2]
-        h = self.boundingbox[3]
-        area= w*h
-        # preprocess sections
-        TL = []
-        TR = []
-        BL = []
-        BR = []
-        for point in self.boundary:
-            if point[0] > h / 2:
-                if point[1] > w / 2:
-                    TR.append(point)
-                else:
-                    TL.append(point)
-            elif point[1] > w / 2:
-                BR.append(point)
-            else:
-                BL.append(point)
-
-        return [len(TL)/area, len(TR)/area, len(BL)/area, len(BR)/area]
-
-
-    def find_char2(self,chars):
-        fv= self.feature_vector2()
-        min=1000000
-        mykey= ''
-        for key, value in chars.fv.items():
-            dist = np.linalg.norm(fv - value)
-            #print(dist)
-            if dist< min:
-                min=dist
-                mykey=key
-        # todo revisar el caso K
-        print(mykey)
-
+        return np.true_divide(FV,length)
 
     def find_char(self, chars):
-        fv=self.feature_vector()
-        min=1000000
-        mykey=''
-        myval= []
+        fv = self.feature_vector()
+        print(fv)
+        min = 1000000
+        mykey = ''
+        myval = []
         for key, value in chars.fv.items():
+            print(key,value)
             dist = np.linalg.norm(fv - value)
-            print(dist)
-            if dist< min:
-                min=dist
-                mykey=key
-                myval= value
+            if dist < min:
+                min = dist
+                mykey = key
+                myval = value
         # todo revisar el caso K
         print(mykey)
+
+'''
+
+    def feature_vector(self):
+        r = len(self.boundary) % 4
+        length = len(self.boundary)
+        section_size = length / 4
+        # key direction, value indx
+        keys = {(-1, 0): 0, (1, 0): 1, (0, -1): 2, (0, 1): 3,
+                (-1, -1): 4, (-1, 1): 5, (1, -1): 6, (1, 1): 7}
+        # up, down , left, right ,t-left,t-right, bot-l, bot-r
+        # feature vector
+        FV = [0, 0, 0, 0, 0, 0, 0, 0]
+        for i in range(length - 1):
+            prev = self.boundary[i]
+            next = self.boundary[i + 1]
+            diff = np.subtract(next, prev)
+            key = (diff[0], diff[1])
+            indx = keys[key]
+            FV[indx] += 1
+        return np.true_divide(FV, length)
+'''
+
 
 
 
