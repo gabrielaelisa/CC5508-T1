@@ -17,8 +17,6 @@ def find_best(array):
             name = i
     return name
 
-
-
 if __name__ == '__main__':
     map={'otsu': Otsu, 'adaptative': Adaptative}
     file= sys.argv[1]
@@ -40,3 +38,18 @@ if __name__ == '__main__':
             s = sorted(dists, key=lambda x: x[0])
             winners= s[:10]
             print(find_best(winners))
+
+
+'''
+import scipy.misc
+
+
+image= io.imread('modelos/5/5_nuevo1.jpg')
+print(image)
+image2= io.imread('modelos/5/5_tes.jpg')
+red = image[:, :, 0]
+green = image[:, :, 1]
+blue = image[:, :, 2]
+gray = 0.299 * red + 0.587 * green + 0.114 * blue
+scipy.misc.toimage(gray, cmin=0, cmax=255).save('modelos/5/5_nuevo1.jpg')
+'''
