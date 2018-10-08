@@ -9,4 +9,4 @@ class Character(GreyImage):
         self.name= name
         self.gimage= io.imread(file)
         super().__init__(self.gimage, algorithm)
-        self.feature_vector= self.components[0].feat
+        self.feature_vector= self.components[0].feature_vector
