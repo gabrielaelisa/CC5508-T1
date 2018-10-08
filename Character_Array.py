@@ -22,11 +22,12 @@ class Characters:
         i=0
         for row in self.chars:
             length= len(row)
-            sum= np.zeros(8)
+            #sum= np.zeros(32)
+            sum=[0]
             for col in row:
 
                 cm=col.components[0]
-                fv= cm.feature_vector()
+                fv= cm.feature_vector2()
                 aux= sum.copy()
                 sum=np.add(aux,fv)
             self.fv.update({i: np.true_divide(sum,length)})

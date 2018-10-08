@@ -143,28 +143,49 @@ class Component:
     def feature_vector(self):
         r= len(self.boundary)%4
         length =len(self.boundary)
-        section_size= length/4
+        section= int(length/4)
+
         #key direction, value indx
+        # up, down , left, right ,t-left,t-right, bot-l, bot-r
         keys= {(-1,0): 0, (1,0): 1, (0,-1): 2 ,(0,1): 3,
                (-1,-1): 4, (-1, 1): 5, (1,-1): 6, (1, 1): 7}
-        #up, down , left, right ,t-left,t-right, bot-l, bot-r
-        #feature vector
-        FV=[0,0,0,0,0,0,0,0]
-        for i in range(length-1):
-            prev= self.boundary[i]
-            next=self.boundary[i+1]
-            diff= np.subtract(next, prev)
-            key= (diff[0], diff[1])
-            indx= keys[key]
-            FV[indx]+=1
-        return np.true_divide(FV,length)
 
-    def find_char(self, chars):
+        #feature vector
+        FV=np.zeros(32)
+        for i in range(4):
+            for j in range(section):
+                if(i*section + j+1== length):
+                    continue
+                prev= self.boundary[i*section + j]
+                next=self.boundary[i*section+ j+1]
+                diff= np.subtract(next, prev)
+                key= (diff[0], diff[1])
+                indx= keys[key]
+                FV[indx+8*i]+=1
+        return np.true_divide(FV,length-r)
+
+    def feature_vector2(self):
+        return [len(self.boundary)/(self.boundingbox[2]*self.boundingbox[3])]
+
+    def find_char(self,chars):
+        fv= self.feature_vector2()
+        min=1000000
+        mykey= ''
+        for key, value in chars.fv.items():
+            dist = abs(fv[0]-value[0])
+            #print(dist)
+            if dist< min:
+                min=dist
+                mykey=key
+        # todo revisar el caso K
+        print(mykey)
+
+
+    def find_char2(self, chars):
         fv=self.feature_vector()
         min=1000000
         mykey=''
         myval= []
-        print("this fv", fv)
         for key, value in chars.fv.items():
             dist = np.linalg.norm(fv - value)
             if dist< min:
@@ -172,7 +193,6 @@ class Component:
                 mykey=key
                 myval= value
         # todo revisar el caso K
-        print(myval)
         print(mykey)
 
 
