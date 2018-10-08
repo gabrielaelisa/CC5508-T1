@@ -8,31 +8,27 @@ class Characters:
         :param algorithm: otsu or adaptative
         '''
         #list of characters containing a list of each photo example
-        self.chars=[[],[],[],[],[],[],[],[],[],[],[]]
+        self.chars=[[],[],[],[],[],[],[],[],[],[]]
         self.fv= {}
 
-        for subdir, dirs, files in os.walk('modelos'):
+        for subdir, dirs, files in os.walk('modelos_nuevos'):
             for file in files:
                 name= os.path.split(subdir)[1]
                 if name =='K':
+                    continue
                     self.chars[10].append(Character(name, os.path.join(subdir, file), algorithm))
                 else:
                     self.chars[int(name)].append(Character(name, os.path.join(subdir, file), algorithm))
 
-        i=0
+    def round(self,i):
+        indx=0
         for row in self.chars:
-            length= len(row)
-            sum= np.zeros(32)
-            col =row[0]
-            cm=col.components[0]
-            fv= cm.feature_vector()
-            aux= sum.copy()
-            sum=np.add(aux,fv)
-            self.fv.update({i: np.true_divide(sum,1)})
-            i += 1
-
-
-
+            #print(row[i].name)
+            col = row[i]
+            cm = col.components[0]
+            fv = cm.feature_vector()
+            self.fv.update({indx: fv})
+            indx+=1
 
 
 

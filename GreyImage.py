@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
 from skimage import io
 from Algorithms import *
-from Graph import *
+from Component import *
+import queue
+
+
 class GreyImage:
 
     def __init__(self, grey_image, algorithm):
@@ -11,20 +14,28 @@ class GreyImage:
         :param algorithm: function either Otsu or Adaptative
         '''
         self.image = grey_image
-        self.binimage= self.to_binary(algorithm)
-        self.components = self.get_components()
+        self.binimage = self.to_binary(algorithm)
+        # vector of 8-connected componets
+        self.components = []
+        # -----------------------------------------
+
+        self.rows = len(self.binimage)
+        self.cols = len(self.binimage[0])
+        # vector of visited nodes
+        self.V = []
+        # current component id
+        self.id = 0
         self.init_attributes()
 
     def init_attributes(self):
+        self.dfs()
         for x in self.components:
             x.init_attributes(self.binimage)
         self.reorder_components()
 
     def reorder_components(self):
-        s=sorted(self.components, key=lambda x: x.boundingbox[1])
-        self.components= s
-
-
+        s = sorted(self.components, key=lambda x: x.boundingbox[1])
+        self.components = s
 
     def get_histogram(self):
         '''
@@ -52,17 +63,6 @@ class GreyImage:
         mybin = self.image >= th
         return mybin
 
-    def get_components(self):
-        '''
-
-        :return: list of Components  for values
-        marked as '0'
-        '''
-        g = Graph(self.binimage)
-        g.dfs()
-
-        return g.components
-
     def avrg_size(self):
         l = len(self.components)
         sum = 0
@@ -71,3 +71,63 @@ class GreyImage:
             sum += x.boundingbox[2] * x.boundingbox[3]
         return sum / l
 
+
+    def mark_visited(self, x):
+        '''
+
+        :param x: tuple (i,j) for position of a node in a graph
+        :return: void
+        '''
+        self.V.append(x)
+
+
+    def in_range(self, x):
+        '''
+
+        :param x: tuple (i,j)
+        :return: bool , is the tuple inside the range of the graph limits
+        '''
+        if x[0] < self.rows and x[0] >= 0:
+            return x[1] < self.cols and x[1] >= 0
+
+        # my depth search algorithm
+
+
+    def dfs(self):
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if (i, j) in self.V: continue
+                self.mark_visited((i, j))
+                if (self.binimage[i][j] == 0):
+                    comp = Component(self.id)
+                    self.components.append(comp)
+                    comp.append_point((i, j))
+                    self.id += 1
+                    self.bfs_iterative(comp, i, j)
+
+        # my breadth search algorithm
+
+
+    def bfs_iterative(self, comp, i, j):
+        '''
+
+        :param comp: Component
+        :param i: position in row
+        :param j: position in column
+        :return: void
+        '''
+        myqueue = queue.Queue(maxsize=0)
+        myqueue.put((i, j))
+        while not myqueue.empty():
+            x = myqueue.get()
+            i = x[0]
+            j = x[1]
+            neighbours = [(i - 1, j), (i - 1, j + 1), (i, j + 1), (i + 1, j + 1),
+                          (i + 1, j), (i + 1, j - 1), (i, j - 1), (i - 1, j - 1)]
+            for x in neighbours:
+                if self.in_range(x) and x not in self.V:
+
+                    if self.binimage[x[0]][x[1]] == 0:
+                        self.mark_visited(x)
+                        comp.append_point(x)
+                        myqueue.put(x)

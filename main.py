@@ -10,7 +10,11 @@ if __name__ == '__main__':
     plt.imsave('boxes.jpg', box)
     border=im.draw_border()
     plt.imsave('borders.jpg', border)
+    '''
     char= Characters(th)
-    im.print_characters(char)
+    for i in range(7):
+        char.round(i)
+        im.print_characters(char)
+        print('--------------------')
 
-
+    '''
