@@ -10,11 +10,13 @@ class Component:
         self.boundary = []
         self.boundingbox = []
         self.feature_vector = []
+        self.proportion= 0
 
     def init_attributes(self, image):
         self.find_box()
         self.find_borders(image)
         self.find_fv()
+        self.proportion=len(self.boundary)/self.boundingbox[2]*self.boundingbox[3]
 
     def append_point(self, x):
         '''
@@ -105,9 +107,14 @@ class Component:
     def find_borders(self, image):
         d = 100000
         p0 = (0, 0)
+        '''
+        i_0= self.boundingbox[0]
+        j_0= self.boundingbox[1]
+        for row in range()
+        '''
 
-        """look for the point with smaller euclidean distance from de origin
-        this point will be the start point"""
+        '''look for the point with smaller euclidean distance from de origin
+        this point will be the start point'''
         for x in self.points:
             dist = math.sqrt(math.pow(x[0], 2) + math.pow(x[1], 2))
             if dist < d:
@@ -138,102 +145,57 @@ class Component:
         for x in self.boundary:
             i = x[0]
             j = x[1]
-            # borde superior
-            red[i][j] = 255
-            green[i][j] = blue[i][j] = 0
+            if self.boundary.index(x)==0:
+                red[i][j] = 0
+                green[i][j] = blue[i][j] = 255
+            else:
+
+                # borde superior
+                red[i][j] = 255
+                green[i][j] = blue[i][j] = 0
 
 
     def find_fv(self):
-        r = len(self.boundary) % 4
-        length = len(self.boundary)
-        section_size = length / 4
-        # key direction, value indx
+        heigth= self.boundingbox[2]/2
+        width= self.boundingbox[3]/3
+        TOP=[]
+        BTM= []
+        LFT= []
+        RGT= []
+        for point in self.boundary:
+            if point[0]> heigth:
+                TOP.append(point)
+            else: BTM.append(point)
+        for point in self.boundary:
+            if point[1]> width:
+                RGT.append(point)
+            else: LFT.append(point)
+
+
+        ''' key direction, value indx 
+        up, down , left, right ,t-left,t-right, bot-l, bot-r
+        '''
         keys = {(-1, 0): 0, (1, 0): 1, (0, -1): 2, (0, 1): 3,
                 (-1, -1): 4, (-1, 1): 5, (1, -1): 6, (1, 1): 7}
-        # up, down , left, right ,t-left,t-right, bot-l, bot-r
+
         # feature vector
-        FV = [0, 0, 0, 0, 0, 0, 0, 0]
-        for i in range(length - 1):
-            prev = self.boundary[i]
-            next = self.boundary[i + 1]
-            diff = np.subtract(next, prev)
-            key = (diff[0], diff[1])
-            indx = keys[key]
-            FV[indx] += 1
+        FV = [0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0]
+        for x in (TOP, BTM, LFT, RGT):
+            u=0
+            for i in range(len(x)-1):
+                prev = x[i]
+                next = x[i + 1]
+                diff = np.subtract(next, prev)
+                key = (diff[0], diff[1])
+                if keys.__contains__(key):
+                    indx = keys[key]
+                    FV[indx +u*8] += 1
+            u+=1
         magnitude= math.sqrt(sum(FV[i] * FV[i] for i in range(len(FV))))
         self.feature_vector= np.true_divide(FV, magnitude)
-
-    def find_char(self, chars):
-        fv = self.feature_vector
-        min = 1000000
-        mykey = ''
-        myval = []
-        for key, value in chars.fv.items():
-            # print(key,value)
-            dist = np.linalg.norm(fv - value)
-            if dist < min:
-                min = dist
-                mykey = key
-                myval = value
-        # todo revisar el caso K
-        print(mykey)
-
-
-    '''
-    def find_fv(self):
-        total=(0,0)
-        for p in self.boundary:
-            sum= np.add(p,total)
-            total=sum
-        m_center= np.true_divide(total,len(self.points))
-        w= m_center[1]
-        h= m_center[0]
-        #preprocess sections
-
-        TL= []
-        TR= []
-        BL= []
-        BR= []
-        for point in self.boundary:
-            if point[0]> h/2:
-                if point[1]> w/2:
-                    TR.append(point)
-                else:
-                    TL.append(point)
-            elif point[1]> w/2:
-                BR.append(point)
-            else:
-                BL.append(point)
-
-        sections=[TL, TR, BL, BR]
-
-        #key direction, value indx
-        # up, down , left, right ,t-left,t-right, bot-l, bot-r
-        keys= {(-1,0): 0, (1,0): 1, (0,-1): 2 ,(0,1): 3,
-               (-1,-1): 4, (-1, 1): 5, (1,-1): 6, (1, 1): 7}
-
-        #feature vector
-        FV=np.zeros(32)
-        for i in range(4):
-            for j in range(len(sections[i])-1):
-                prev= sections[i][j]
-                next=sections[i][j+1]
-                diff= np.subtract(next, prev)
-                key= (diff[0], diff[1])
-                if not keys.__contains__(key):
-                    continue
-                indx= keys[key]
-                FV[indx+8*i]+=1
-
-        sum=0
-        for i in range(32):
-            sum+= FV[i]*FV[i]
-        magnitude= math.sqrt(sum)
-        self.feature_vector = np.true_divide(FV, magnitude)
-    '''
-
-
-
 
 
 
