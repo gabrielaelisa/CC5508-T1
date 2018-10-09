@@ -1,6 +1,5 @@
 
 from GreyImage import *
-
 from Character import *
 
 class Image(GreyImage):

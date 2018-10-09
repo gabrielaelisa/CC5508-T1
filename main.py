@@ -27,9 +27,9 @@ if __name__ == '__main__':
 
     im= Image(file,th)
     box=im.draw_box()
-    plt.imsave('boxes.jpg', box)
+    plt.imsave('resultados/boxes.jpg', box)
     border=im.draw_border()
-    plt.imsave('borders.jpg', border)
+    plt.imsave('resultados/borders.jpg', border)
     char=Characters(th)
     result = ''
     for comp in im.components:
@@ -41,20 +41,5 @@ if __name__ == '__main__':
             s = sorted(dists, key=lambda x: x[0])
             winners= s[:10]
             result+=str(find_best(winners))
-    print(result)
-
-'''
-import scipy.misc
-#im=io.imread('modelos_nuevos/1/1_nuevo1.jpg')
-#print(im)
-image= Image('modelos_nuevos/1/1_test.jpg', Adaptative)
-im= image.binimage.copy()
-scipy.misc.toimage(im, cmin=0, cmax=1).save('modelos/1/1_nuevo2.jpg')
-
-
-red = image[:, :, 0]
-green = image[:, :, 1]
-blue = image[:, :, 2]
-gray = 0.299 * red + 0.587 * green + 0.114 * blue
-scipy.misc.toimage(gray, cmin=0, cmax=255).save('modelos/5/5_nuevo1.jpg')
-'''
+    f = open("resultados/result.txt", "w+")
+    f.write(result)
