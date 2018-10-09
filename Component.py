@@ -11,11 +11,12 @@ class Component:
         self.boundingbox = []
         self.feature_vector = []
         self.proportion= 0
+        self.image= []
 
     def init_attributes(self, image):
         self.find_box()
         self.find_borders(image)
-        self.find_fv()
+        self.find_new_fv()
         self.proportion=len(self.boundary)/self.boundingbox[2]*self.boundingbox[3]
 
     def append_point(self, x):
@@ -108,6 +109,7 @@ class Component:
             return n[indx + 1]
 
     def find_borders(self, image):
+        self.image= image
         d = 100000
         p0 = (0, 0)
 
@@ -193,6 +195,75 @@ class Component:
             sum += FV[i] * FV[i]
         magnitude = math.sqrt(sum)
         self.feature_vector = np.true_divide(FV, magnitude)
+
+    def find_new_fv(self):
+        dict= {(0,0,0,0): 0,(0,0,0,1): 1, (0,0,1,0): 2, (0,0,1,1):3,
+               (0,1,0,0): 4, (0,1,0,1):5, (0,1,1,0):6, (0,1,1,1): 7,
+               (1,0,0,0): 8, (1,0,0,1): 9, (1,0,1,0): 10, (1,0,1,1):11,
+                (1,1,0,0): 12, (1,1,0,1): 13, (1,1,1,0): 14, (1,1,1,1): 15
+               }
+
+        all_points=[]
+        backround= []
+        FV = np.zeros(16)
+        i_0 = self.boundingbox[1]
+        j_0 = self.boundingbox[0]
+        w = self.boundingbox[2]
+        h = self.boundingbox[3]
+        for row in range(i_0, i_0 - h, -1):
+            for col in range(j_0, j_0 + w):
+                all_points.append((row,col))
+
+        for p in all_points:
+            if p not in self.points:
+                backround.append(p)
+
+        for p in backround:
+            if(self.in_range(p, self.image)):
+                dir= self.vector(p)
+                indx= dict[dir]
+                FV[indx]+=1
+        sum = 0
+        for i in range(len(FV)):
+            sum += FV[i] * FV[i]
+        magnitude = math.sqrt(sum)
+        self.feature_vector = np.true_divide(FV, magnitude)
+
+    def vector(self,p):
+        dir=[0,0,0,0]
+        #north
+        qn= p
+        while self.in_range((qn[0]-1,qn[1]), self.image):
+            if qn in self.boundary:
+                dir[0]=1
+                break
+            qn= (qn[0]-1, qn[1])
+
+        #south
+        qs= p
+        while self.in_range((qs[0]+1,qs[1]), self.image):
+            if qs in self.boundary:
+                dir[1]=1
+                break
+            qs= (qs[0]+1, qs[1])
+        #west
+
+        qw = p
+        while self.in_range((qw[0], qw[1]-1), self.image):
+            if qw in self.boundary:
+                dir[2] = 1
+                break
+            qw= (qw[0],qw[1] - 1)
+
+        #east
+        qe = p
+        while self.in_range((qe[0], qe[1] + 1), self.image):
+                if qe in self.boundary:
+                    dir[3] = 1
+                    break
+                qe= (qe[0], qe[1] +1)
+
+        return tuple(dir)
 
     '''
        def find_fv(self):

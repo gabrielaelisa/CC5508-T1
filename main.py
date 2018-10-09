@@ -43,3 +43,4 @@ if __name__ == '__main__':
             result+=str(find_best(winners))
     f = open("resultados/result.txt", "w+")
     f.write(result)
+    print(result)
