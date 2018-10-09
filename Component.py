@@ -136,7 +136,8 @@ class Component:
         q = (p0[0], p0[1] - 1)
 
         self.boundary.append(p)
-
+        if len(self.points) ==1:
+            return
         while (self.next_neighbour(p, q) != p0):
             q_p = q
             q = self.next_neighbour(p, q_p)
@@ -197,13 +198,13 @@ class Component:
         self.feature_vector = np.true_divide(FV, magnitude)
 
     def find_new_fv(self):
+
         dict= {(0,0,0,0): 0,(0,0,0,1): 1, (0,0,1,0): 2, (0,0,1,1):3,
                (0,1,0,0): 4, (0,1,0,1):5, (0,1,1,0):6, (0,1,1,1): 7,
                (1,0,0,0): 8, (1,0,0,1): 9, (1,0,1,0): 10, (1,0,1,1):11,
                 (1,1,0,0): 12, (1,1,0,1): 13, (1,1,1,0): 14, (1,1,1,1): 15
                }
 
-        all_points=[]
         backround= []
         FV = np.zeros(16)
         i_0 = self.boundingbox[1]
@@ -212,11 +213,9 @@ class Component:
         h = self.boundingbox[3]
         for row in range(i_0, i_0 - h, -1):
             for col in range(j_0, j_0 + w):
-                all_points.append((row,col))
+                if (row,col) not in self.points:
+                    backround.append((row,col))
 
-        for p in all_points:
-            if p not in self.points:
-                backround.append(p)
 
         for p in backround:
             if(self.in_range(p, self.image)):
@@ -264,28 +263,6 @@ class Component:
                 qe= (qe[0], qe[1] +1)
 
         return tuple(dir)
-
-    '''
-       def find_fv(self):
-           keys = {(-1, 0): 0, (1, 0): 1, (0, -1): 2, (0, 1): 3,
-                   (-1, -1): 4, (-1, 1): 5, (1, -1): 6, (1, 1): 7}
-
-           x= self.boundary
-           FV= np.zeros(32)
-           for i in range(len(x) - 1):
-               prev = x[i]
-               next = x[i + 1]
-               diff = np.subtract(next, prev)
-               key = (diff[0], diff[1])
-               indx = keys[key]
-               FV[indx] += 1
-           sum = 0
-           for i in range(len(FV)):
-               sum += FV[i] * FV[i]
-           magnitude = math.sqrt(sum)
-           self.feature_vector = np.true_divide(FV, magnitude)
-   '''
-
 
 
 
