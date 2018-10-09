@@ -27,25 +27,27 @@ class Component:
         self.points.append(x)
 
     def find_box(self):
-        x_min = self.points[0][0]
+        #column
+        x_min = self.points[0][1]
         x_max = x_min
-        y_min = self.points[0][1]
+        #row
+        y_min = self.points[0][0]
         y_max = y_min
-        for (x, y) in self.points:
-            if x < x_min:
-                x_min = x
-            if x > x_max:
-                x_max = x
-            if y < y_min:
-                y_min = y
-            if y > y_max:
-                y_max = y
+        for (row, col) in self.points:
+            if col < x_min:
+                x_min = col
+            if col > x_max:
+                x_max = col
+            if row < y_min:
+                y_min = row
+            if row > y_max:
+                y_max = row
         # initialpoint for bondingbox
-        # esquina superior izquierda
-        # todo
         # checkear que este dentro de los indices de la imagen
+
+        # esquina superior izquierda
         xi = x_min - 1
-        yi = y_max + 1
+        yi = y_max +1
         width = x_max + 1 - (x_min - 1)
         heigth = y_max + 1 - (y_min - 1)
         self.boundingbox.extend([xi, yi, width, heigth])
@@ -60,20 +62,21 @@ class Component:
         w = box[2]
         h = box[3]
 
-        for i in range(x, x + w + 1):
-            # borde superior
-            red[i][y] = 255
-            green[i][y] = blue[i][y] = 0
+        #borde superior
+        for j in range(x, x+w):
+            red[y][j] = 255
+            green[y][j] = blue[y][j] = 0
             # borde inferior
-            red[i][y - h] = 255
-            green[i][y - h] = blue[i][y - h] = 0
-        for j in range(y - h, y + 1):
+            red[y - h][j] = 255
+            green[y - h][j] = blue[y - h][j] = 0
+
+        for i in range(y - h, y):
             # borde izquiedo
-            red[x][j] = 255
-            green[x][j] = blue[x][j] = 0
+            red[i][x] = 255
+            green[i][x] = blue[i][x] = 0
             # borde derecho
-            red[x + w][j] = 255
-            green[x + w][j] = blue[x + w][j] = 0
+            red[i][x+w] = 255
+            green[i][x + w] = blue[i][x + w] = 0
 
     def in_range(self, x, im):
         '''
@@ -107,19 +110,25 @@ class Component:
     def find_borders(self, image):
         d = 100000
         p0 = (0, 0)
-        '''
-        i_0= self.boundingbox[0]
-        j_0= self.boundingbox[1]
-        for row in range()
-        '''
+
+        i_0= self.boundingbox[1]
+        j_0= self.boundingbox[0]
+        w =self.boundingbox[2]
+        h= self.boundingbox[3]
+        for row in range(i_0, i_0 - h, -1):
+            for col in range(j_0, j_0+w):
+                if (row,col) in self.points:
+                    p0= (row,col)
+                    break
+
 
         '''look for the point with smaller euclidean distance from de origin
-        this point will be the start point'''
+        this point will be the start point
         for x in self.points:
             dist = math.sqrt(math.pow(x[0], 2) + math.pow(x[1], 2))
             if dist < d:
                 d = dist
-                p0 = (x[0], x[1])
+                p0 = (x[0], x[1])'''
 
         p = p0
         q = (p0[0], p0[1] - 1)
@@ -147,7 +156,8 @@ class Component:
             j = x[1]
             if self.boundary.index(x)==0:
                 red[i][j] = 0
-                green[i][j] = blue[i][j] = 255
+                green[i][j] =255
+                blue[i][j] = 0
             else:
 
                 # borde superior
