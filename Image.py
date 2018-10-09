@@ -68,8 +68,8 @@ class Image(GreyImage):
 '''
 imagen = Image('ejemplos/rut_6.jpg', Otsu)
 imagen2=Image('ejemplos/rut_6.jpg', Adaptative)
-#imagen.draw_box()
-#imagen2.draw_box()
+imagen.draw_box()
+imagen2.draw_box()
 
 fig, xs = plt.subplots(3, 1)
 xs[0].imshow(imagen.rgbimage, cmap='gray', vmax=255, vmin=0)
@@ -84,4 +84,5 @@ xs[2].imshow(imagen2.binimage, cmap='gray', vmax=1, vmin=0)
 xs[2].axis('off')
 xs[2].set_title("Adaptative Algorithm boxsize 55")
 plt.show()
+
 '''

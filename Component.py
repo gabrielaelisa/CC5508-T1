@@ -154,46 +154,30 @@ class Component:
         for x in self.boundary:
             i = x[0]
             j = x[1]
-            if self.boundary.index(x)==0:
-                red[i][j] = 0
-                green[i][j] =255
-                blue[i][j] = 0
-            else:
-
-                # borde superior
-                red[i][j] = 255
-                green[i][j] = blue[i][j] = 0
+            red[i][j] = 255
+            green[i][j] = blue[i][j] = 0
 
 
     def find_fv(self):
-        heigth= self.boundingbox[2]/2
-        width= self.boundingbox[3]/3
-        TOP=[]
-        BTM= []
+        heigth= self.boundingbox[3]/2
         LFT= []
         RGT= []
+
         for point in self.boundary:
-            if point[0]> heigth:
-                TOP.append(point)
-            else: BTM.append(point)
-        for point in self.boundary:
-            if point[1]> width:
+            if point[1]> heigth:
                 RGT.append(point)
             else: LFT.append(point)
 
 
-        ''' key direction, value indx 
-        up, down , left, right ,t-left,t-right, bot-l, bot-r
-        '''
+        #key direction, value indx
+        #up, down , left, right ,t-left,t-right, bot-l, bot-r
+
         keys = {(-1, 0): 0, (1, 0): 1, (0, -1): 2, (0, 1): 3,
                 (-1, -1): 4, (-1, 1): 5, (1, -1): 6, (1, 1): 7}
 
         # feature vector
-        FV = [0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0]
-        for x in (TOP, BTM, LFT, RGT):
+        FV = np.zeros(16)
+        for x in ( LFT, RGT):
             u=0
             for i in range(len(x)-1):
                 prev = x[i]
@@ -204,8 +188,33 @@ class Component:
                     indx = keys[key]
                     FV[indx +u*8] += 1
             u+=1
-        magnitude= math.sqrt(sum(FV[i] * FV[i] for i in range(len(FV))))
-        self.feature_vector= np.true_divide(FV, magnitude)
+        sum = 0
+        for i in range(len(FV)):
+            sum += FV[i] * FV[i]
+        magnitude = math.sqrt(sum)
+        self.feature_vector = np.true_divide(FV, magnitude)
+
+    '''
+       def find_fv(self):
+           keys = {(-1, 0): 0, (1, 0): 1, (0, -1): 2, (0, 1): 3,
+                   (-1, -1): 4, (-1, 1): 5, (1, -1): 6, (1, 1): 7}
+
+           x= self.boundary
+           FV= np.zeros(32)
+           for i in range(len(x) - 1):
+               prev = x[i]
+               next = x[i + 1]
+               diff = np.subtract(next, prev)
+               key = (diff[0], diff[1])
+               indx = keys[key]
+               FV[indx] += 1
+           sum = 0
+           for i in range(len(FV)):
+               sum += FV[i] * FV[i]
+           magnitude = math.sqrt(sum)
+           self.feature_vector = np.true_divide(FV, magnitude)
+   '''
+
 
 
 

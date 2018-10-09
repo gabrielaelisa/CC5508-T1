@@ -31,7 +31,7 @@ if __name__ == '__main__':
     border=im.draw_border()
     plt.imsave('borders.jpg', border)
     char=Characters(th)
-
+    result = ''
     for comp in im.components:
         if (comp.boundingbox[2] * comp.boundingbox[3] > 2 / 3 * im.avrg_size()):
             dists= []
@@ -40,8 +40,8 @@ if __name__ == '__main__':
                 dists.append((dist, model.name))
             s = sorted(dists, key=lambda x: x[0])
             winners= s[:10]
-            print(find_best(winners))
-
+            result+=str(find_best(winners))
+    print(result)
 
 '''
 import scipy.misc

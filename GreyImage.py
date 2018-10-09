@@ -34,7 +34,7 @@ class GreyImage:
         self.reorder_components()
 
     def reorder_components(self):
-        s = sorted(self.components, key=lambda x: x.boundingbox[1])
+        s = sorted(self.components, key=lambda x: x.boundingbox[0])
         self.components = s
 
     def get_histogram(self):

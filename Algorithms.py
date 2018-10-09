@@ -35,7 +35,7 @@ def Adaptative(im):
     :param im: Grey_Image
     :return: threshold for adaptative algorithm
     '''
-    block_size = 35
+    block_size = 25
     return threshold_local(im.gimage, block_size, offset=10)
 
 def getAccum(histogram, length=256):
