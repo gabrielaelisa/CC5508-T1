@@ -33,14 +33,13 @@ if __name__ == '__main__':
     char=Characters(th)
     result = ''
     for comp in im.components:
-        if (comp.boundingbox[2] * comp.boundingbox[3] > 2 / 3 * im.avrg_size()):
-            dists= []
-            for model in char.models:
-                dist= np.linalg.norm(comp.feature_vector - model.feature_vector)
-                dists.append((dist, model.name))
-            s = sorted(dists, key=lambda x: x[0])
-            winners= s[:10]
-            result+=str(find_best(winners))
+        dists= []
+        for model in char.models:
+            dist= np.linalg.norm(comp.feature_vector - model.feature_vector)
+            dists.append((dist, model.name))
+        s = sorted(dists, key=lambda x: x[0])
+        winners= s[:10]
+        result+=str(find_best(winners))
     f = open("resultados/result.txt", "w+")
     f.write(result)
     print("Listo! resultados en la carpeta /resultados")

@@ -45,8 +45,7 @@ class Image(GreyImage):
         #create a local copy of atribute
         image = self.rgbimage.copy()
         for x in self.components:
-            if (x.boundingbox[2] * x.boundingbox[3] > 2 / 3 * self.avrg_size()):
-                x.draw_box(image)
+            x.draw_box(image)
         return image
 
     def draw_border(self):
@@ -59,6 +58,5 @@ class Image(GreyImage):
 
     def print_characters(self, chars):
         for x in self.components:
-            if (x.boundingbox[2] * x.boundingbox[3] > 2 / 3 * self.avrg_size()):
-                x.find_char(chars)
+            x.find_char(chars)
 

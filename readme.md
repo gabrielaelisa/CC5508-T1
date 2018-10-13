@@ -15,6 +15,6 @@ desde una consola o terminal linux correr el siguiente comando:
 ## Resultados:
 
 los resultados serán visibles en la carpeta resultados
-* un archivo bordes.jpj
+* un archivo bordes.jpg
 * un archivo boxes.jpg
 * un archivo result.txt

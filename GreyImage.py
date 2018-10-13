@@ -32,10 +32,19 @@ class GreyImage:
         for x in self.components:
             x.init_attributes(self.binimage)
         self.reorder_components()
+        self.select_components()
 
     def reorder_components(self):
         s = sorted(self.components, key=lambda x: x.boundingbox[0])
         self.components = s
+
+    def select_components(self):
+        avrg= self.avrg_size()
+        new_components=[]
+        for c in self.components:
+            if c.proportion> 2/3*avrg:
+                new_components.append(c)
+        self.components=new_components
 
     def get_histogram(self):
         '''
@@ -68,7 +77,7 @@ class GreyImage:
         sum = 0
 
         for x in self.components:
-            sum += x.boundingbox[2] * x.boundingbox[3]
+            sum += x.proportion
         return sum / l
 
 

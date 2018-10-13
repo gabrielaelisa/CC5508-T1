@@ -17,7 +17,7 @@ class Component:
         self.find_box()
         self.find_borders(image)
         self.find_new_fv()
-        self.proportion=len(self.boundary)/self.boundingbox[2]*self.boundingbox[3]
+        self.proportion=self.boundingbox[2]*self.boundingbox[3]
 
     def append_point(self, x):
         '''
