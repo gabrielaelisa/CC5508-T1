@@ -62,26 +62,3 @@ class Image(GreyImage):
             if (x.boundingbox[2] * x.boundingbox[3] > 2 / 3 * self.avrg_size()):
                 x.find_char(chars)
 
-
-
-'''
-imagen = Image('ejemplos/rut_6.jpg', Otsu)
-imagen2=Image('ejemplos/rut_6.jpg', Adaptative)
-imagen.draw_box()
-imagen2.draw_box()
-
-fig, xs = plt.subplots(3, 1)
-xs[0].imshow(imagen.rgbimage, cmap='gray', vmax=255, vmin=0)
-xs[0].axis('off')
-xs[0].set_title("Original")
-
-xs[1].imshow(imagen.binimage, cmap='gray', vmax=1, vmin=0)
-xs[1].axis('off')
-xs[1].set_title("Otsu Algorithm")
-
-xs[2].imshow(imagen2.binimage, cmap='gray', vmax=1, vmin=0)
-xs[2].axis('off')
-xs[2].set_title("Adaptative Algorithm boxsize 55")
-plt.show()
-
-'''

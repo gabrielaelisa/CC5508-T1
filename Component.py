@@ -218,10 +218,9 @@ class Component:
 
 
         for p in backround:
-            if(self.in_range(p, self.image)):
-                dir= self.vector(p)
-                indx= dict[dir]
-                FV[indx]+=1
+            dir= self.vector(p)
+            indx= dict[dir]
+            FV[indx]+=1
         sum = 0
         for i in range(len(FV)):
             sum += FV[i] * FV[i]
