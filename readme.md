@@ -18,3 +18,11 @@ los resultados serán visibles en la carpeta resultados
 * un archivo bordes.jpg
 * un archivo boxes.jpg
 * un archivo result.txt
+
+ejemplo de resultados:
+###Imagen original
+![original](https://github.com/gabrielaelisa/CC5508-T1/blob/master/ejemplos/rut_1.jpg)
+### Cajas detectadas:
+![cajas](https://github.com/gabrielaelisa/CC5508-T1/blob/master/resultados/boxes.jpg)
+### Bordes detectados:
+![bordes](https://github.com/gabrielaelisa/CC5508-T1/blob/master/resultados/borders.jpg)
